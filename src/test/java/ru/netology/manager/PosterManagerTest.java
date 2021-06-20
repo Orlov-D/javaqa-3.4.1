@@ -2,63 +2,57 @@ package ru.netology.manager;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import ru.netology.domain.Movie;
 import ru.netology.domain.PurchaseItem;
+import ru.netology.repository.PosterRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class PosterManagerTest {
-    PosterManager manager = new PosterManager();
+    @Mock
+    private PosterRepository repository;
+    @InjectMocks
+    private PosterManager manager;
+    private Movie first = new Movie(1, "first", "ved1", "detective");
+    private Movie second = new Movie(2, "second", "ruby2", "horror");
+    private Movie tri = new Movie(3, "third", "ved3", "drama");
 
-    Movie first = new Movie(1, "first", "ved1", "detective");
-    Movie second = new Movie(2, "second", "ruby2", "horror");
-    Movie tri = new Movie(3, "third", "ved3", "drama");
-
-    @Test
-    void addAtEmpty() {
-        manager.add(first);
-
-        assertArrayEquals(new Movie[]{first}, manager.getAll());
-//        Как проверить метод add без метода getAll? Ведь второй метод может не работать... Заглушки?
-//        Получается и getAll уже проверена без конструктора.
-    }
-
-    @Test
-    void addTwoElements() {
-        manager.add(first);
-        manager.add(second);
-
-        assertArrayEquals(new Movie[]{second, first}, manager.getAll());
-    }
-
-    @Test
-    void addThreeElements() {
-        manager.add(first);
-        manager.add(second);
-        manager.add(tri);
-
-        assertArrayEquals(new Movie[]{tri, second, first}, manager.getAll());
-    }
+//    @Test
+//    void deleteById() {
+//        doNothing().when(repository).removeById(2);
+//
+//        Movie[] returned = new Movie[]{first, second, tri};
+//        doReturn(returned).when(repository).removeById(2);
+//        manager.removeById(2);
+//
+//        verify(repository).removeById(2);
+//    }
+//
+//    @Test
+//    void add() {
+//        doNothing().when(repository).save(first);
+//        manager.add(first);
+//
+//        verify(repository).save(first);
+//    }
+//    тут вроде логики нет и покрывать тестами не надо...
 
     @Test
-    void getAllViaConstructorUnder() {
-        PosterManager manager2 = new PosterManager(1);
+    void getAll() {
+        Movie[] returned = new Movie[]{tri, second, first};
+        doReturn(returned).when(repository).findAll();
 
-        manager2.add(first);
-        manager2.add(second);
-        manager2.add(tri);
+        assertArrayEquals(returned, manager.getAll());
+//        org.mockito.exceptions.misusing.NullInsteadOfMockException:
+//        Argument passed to when() is null!
+//        Example of correct stubbing:
+//        doThrow(new RuntimeException()).when(mock).someMethod();
+//        Also, if you use @Mock annotation don't miss openMocks()
 
-        assertArrayEquals(new Movie[]{tri}, manager2.getAll());
+//        verify(repository).findAll;
     }
 
-    @Test
-    void getAllViaConstructorAbove() {
-        PosterManager manager2 = new PosterManager(5);
-
-        manager2.add(first);
-        manager2.add(second);
-        manager2.add(tri);
-
-        assertArrayEquals(new Movie[]{tri, second, first}, manager2.getAll());
-    }
 }
