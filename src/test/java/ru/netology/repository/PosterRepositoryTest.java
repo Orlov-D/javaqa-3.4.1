@@ -28,6 +28,15 @@ class PosterRepositoryTest {
     }
 
     @Test
+    void findByIdNull() {
+        posterRepository.save(second);
+        posterRepository.save(first);
+        posterRepository.save(tri);
+
+        assertEquals(null, posterRepository.findById(0));
+    }
+
+    @Test
     void removeById() {
         posterRepository.save(second);
         posterRepository.save(first);

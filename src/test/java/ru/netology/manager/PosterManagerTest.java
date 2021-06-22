@@ -2,14 +2,17 @@ package ru.netology.manager;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.netology.domain.Movie;
 import ru.netology.domain.PurchaseItem;
 import ru.netology.repository.PosterRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+@ExtendWith(MockitoExtension.class)
 
 class PosterManagerTest {
     @Mock
@@ -42,17 +45,13 @@ class PosterManagerTest {
 
     @Test
     void getAll() {
-        Movie[] returned = new Movie[]{tri, second, first};
+        Movie[] returned = new Movie[]{first, second, tri};
+        Movie[] expected = new Movie[]{tri, second, first};
         doReturn(returned).when(repository).findAll();
 
-        assertArrayEquals(returned, manager.getAll());
-//        org.mockito.exceptions.misusing.NullInsteadOfMockException:
-//        Argument passed to when() is null!
-//        Example of correct stubbing:
-//        doThrow(new RuntimeException()).when(mock).someMethod();
-//        Also, if you use @Mock annotation don't miss openMocks()
+        assertArrayEquals(expected, manager.getAll());
 
-//        verify(repository).findAll;
+        verify(repository).findAll();
     }
 
 }
